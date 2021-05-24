@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import kodlama.io.hrms.business.abstracts.UserService;
+import kodlama.io.hrms.core.utilities.results.DataResult;
 import kodlama.io.hrms.entities.concretes.User;
 
 @RestController
@@ -22,7 +23,7 @@ public class UsersController {
 	}
 	
 	@GetMapping("/getall")
-	public List<User> getAll() {
+	public DataResult<List<User>> getAll() {
 		return this.userService.getAll();
 	}
 

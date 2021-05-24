@@ -3,17 +3,24 @@ package kodlama.io.hrms.entities.concretes;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name="Users")
+@Table(name="users")
+@NoArgsConstructor
+@AllArgsConstructor
+@PrimaryKeyJoinColumn(name = "user_id")
 public class User {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="user_id")
 	private int id;
 	
@@ -23,16 +30,10 @@ public class User {
 	@Column(name="password")
 	private String password;
 	
+	@Column(name="password_again")
+	private String passwordAgain;
+	
 	@Column(name="verification_status")
 	private boolean verificationStatus;
-	
-	public User() { }
-
-	public User(int id, String email, String password, boolean verificationStatus) {
-		this.id = id;
-		this.email = email;
-		this.password = password;
-		this.verificationStatus = verificationStatus;
-	}
 
 }
