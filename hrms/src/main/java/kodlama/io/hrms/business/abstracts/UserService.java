@@ -8,8 +8,8 @@ import kodlama.io.hrms.entities.concretes.User;
 
 public interface UserService {
 	DataResult<List<User>> getAll();
-	Result add(User user);
-	Result update(User user);
-	Result delete(User user);
+	User add(User user);
+	User update(User user);
+	User delete(User user);
 
 }

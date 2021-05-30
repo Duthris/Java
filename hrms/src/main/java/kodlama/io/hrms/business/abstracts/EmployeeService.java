@@ -8,9 +8,9 @@ import kodlama.io.hrms.entities.concretes.Employee;
 
 public interface EmployeeService {
 	DataResult<List<Employee>> getAll();
-	Result add(Employee employee);
-	Result update(Employee employee);
-	Result delete(Employee employee);
+	Employee add(Employee employee);
+	Employee update(Employee employee);
+	Employee delete(Employee employee);
 	
 	
 }

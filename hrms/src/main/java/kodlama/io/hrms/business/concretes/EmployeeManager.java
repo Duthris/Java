@@ -8,6 +8,7 @@ import kodlama.io.hrms.business.abstracts.EmployeeService;
 import kodlama.io.hrms.core.utilities.results.DataResult;
 import kodlama.io.hrms.core.utilities.results.Result;
 import kodlama.io.hrms.core.utilities.results.SuccessDataResult;
+import kodlama.io.hrms.core.utilities.results.SuccessResult;
 import kodlama.io.hrms.dataAccess.abstracts.EmployeeDao;
 import kodlama.io.hrms.entities.concretes.Candidate;
 import kodlama.io.hrms.entities.concretes.Employee;
@@ -28,19 +29,19 @@ public class EmployeeManager implements EmployeeService {
 	}
 
 	@Override
-	public Result add(Employee employee) {
+	public Employee add(Employee employee) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Result update(Employee employee) {
+	public Employee update(Employee employee) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Result delete(Employee employee) {
+	public Employee delete(Employee employee) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -32,19 +32,18 @@ public class UserManager implements UserService {
 	}
 
 	@Override
-	public Result add(User user) {
-		this.userDao.save(user);
-		return new SuccessResult("User added successfully!");
+	public User add(User user) {
+		return userDao.save(user);
 	}
 
 	@Override
-	public Result update(User user) {
+	public User update(User user) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Result delete(User user) {
+	public User delete(User user) {
 		// TODO Auto-generated method stub
 		return null;
 	}

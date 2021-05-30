@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
@@ -17,11 +19,11 @@ import lombok.NoArgsConstructor;
 @Table(name="users")
 @NoArgsConstructor
 @AllArgsConstructor
-@PrimaryKeyJoinColumn(name = "user_id")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="user_id")
+	@Column(name="id")
 	private int id;
 	
 	@Column(name="email")
@@ -29,11 +31,4 @@ public class User {
 	
 	@Column(name="password")
 	private String password;
-	
-	@Column(name="password_again")
-	private String passwordAgain;
-	
-	@Column(name="verification_status")
-	private boolean verificationStatus;
-
 }
