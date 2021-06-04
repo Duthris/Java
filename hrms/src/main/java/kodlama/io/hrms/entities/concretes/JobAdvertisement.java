@@ -62,7 +62,6 @@ public class JobAdvertisement {
 	
 	@Column(name="description")
 	@Type(type = "text")
-	@Lob
 	private String description;
 	
 	@ManyToOne

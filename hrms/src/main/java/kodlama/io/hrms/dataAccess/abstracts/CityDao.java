@@ -6,5 +6,7 @@ import kodlama.io.hrms.entities.concretes.City;
 
 public interface CityDao extends JpaRepository<City, Integer> {
 	boolean existsById(int id);
+	
+	City findById(int id);
 
 }
