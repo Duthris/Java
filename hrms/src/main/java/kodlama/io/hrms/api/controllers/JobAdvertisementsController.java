@@ -2,7 +2,9 @@ package kodlama.io.hrms.api.controllers;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,9 +17,11 @@ import kodlama.io.hrms.business.abstracts.JobAdvertisementService;
 import kodlama.io.hrms.core.utilities.results.DataResult;
 import kodlama.io.hrms.core.utilities.results.Result;
 import kodlama.io.hrms.entities.concretes.JobAdvertisement;
+import kodlama.io.hrms.entities.dtos.JobAdvertisementDto;
 
 @RestController
-@RequestMapping("/api/jobadvertisements")
+@RequestMapping("/api/jobAdvertisements")
+@CrossOrigin
 public class JobAdvertisementsController {
 	
 	private JobAdvertisementService jobAdvertisementService;
@@ -53,8 +57,23 @@ public class JobAdvertisementsController {
 	}
 	
 	@PostMapping("/add")
-	Result add(@RequestBody JobAdvertisement jobAdvertisement) {
-		return this.jobAdvertisementService.add(jobAdvertisement);
+	Result add(@RequestBody JobAdvertisementDto jobAdvertisementDto) {
+		return this.jobAdvertisementService.add(jobAdvertisementDto);
+	}
+	
+	@GetMapping("/getAllPassiveJobs")
+	public DataResult<List<JobAdvertisement>> getAllByActivationStatusFalse() {
+		return this.jobAdvertisementService.getAllByActivationStatusFalse();
+	}
+	
+	@GetMapping("/getById")
+	public DataResult<JobAdvertisement> getById(@RequestParam int id) {
+		return this.jobAdvertisementService.getById(id);
+	}
+	
+	@PostMapping("/delete")
+	public Result delete(@RequestBody JobAdvertisement jobAdvertisement) {
+		return this.jobAdvertisementService.delete(jobAdvertisement);
 	}
 
 }

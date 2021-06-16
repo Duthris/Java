@@ -73,6 +73,10 @@ public class CandidateManager implements CandidateService {
 			return new ErrorResult("Invalid E-mail Format!");
 		}
 		
+		if (!candidateCheckService.checkIfRealPerson(candidate)) {
+			return new ErrorResult("Validation Error: Not a Valid Person!");
+		}
+		
 		else {
 			User userToSave = this.userService.add(candidate);
 			

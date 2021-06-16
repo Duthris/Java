@@ -1,5 +1,6 @@
 package kodlama.io.hrms.business.concretes;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,11 @@ import kodlama.io.hrms.core.utilities.results.SuccessResult;
 import kodlama.io.hrms.dataAccess.abstracts.CityDao;
 import kodlama.io.hrms.dataAccess.abstracts.EmployerDao;
 import kodlama.io.hrms.dataAccess.abstracts.JobAdvertisementDao;
+import kodlama.io.hrms.dataAccess.abstracts.JobPositionDao;
+import kodlama.io.hrms.dataAccess.abstracts.WorkingMethodDao;
+import kodlama.io.hrms.dataAccess.abstracts.WorkingTimeDao;
 import kodlama.io.hrms.entities.concretes.JobAdvertisement;
+import kodlama.io.hrms.entities.dtos.JobAdvertisementDto;
 
 @Service
 public class JobAdvertisementManager implements JobAdvertisementService {
@@ -24,19 +29,32 @@ public class JobAdvertisementManager implements JobAdvertisementService {
 	private JobAdvertisementDao jobAdvertisementDao;
 	private EmployerDao employerDao;
 	private CityDao cityDao;
+	private JobPositionDao jobPositionDao;
+	private WorkingMethodDao workingMethodDao;
+	private WorkingTimeDao workingTimeDao;
 	
 	@Autowired
-	public JobAdvertisementManager(JobAdvertisementDao jobAdvertisementDao, EmployerDao employerDao, CityDao cityDao) {
+	public JobAdvertisementManager(JobAdvertisementDao jobAdvertisementDao, EmployerDao employerDao, CityDao cityDao, 
+			JobPositionDao jobPositionDao, WorkingMethodDao workingMethodDao, WorkingTimeDao workingTimeDao) {
 		super();
 		this.jobAdvertisementDao = jobAdvertisementDao;
 		this.cityDao = cityDao;
 		this.employerDao = employerDao;
+		this.jobPositionDao = jobPositionDao;
+		this.workingMethodDao = workingMethodDao;
+		this.workingTimeDao = workingTimeDao;
 	}
 
 	@Override
 	public DataResult<List<JobAdvertisement>> getAll() {
 		return new SuccessDataResult<List<JobAdvertisement>>
 		(this.jobAdvertisementDao.getAllByActivationStatusTrue(), "All Active Job Advertisements are successfully Listed.");
+	}
+	
+	@Override
+	public DataResult<List<JobAdvertisement>> getAllByActivationStatusFalse() {
+		return new SuccessDataResult<List<JobAdvertisement>>
+		(this.jobAdvertisementDao.getAllByActivationStatusFalse(), "All Passive Job Advertisements are successfully Listed.");
 	}
 
 	@Override
@@ -67,7 +85,22 @@ public class JobAdvertisementManager implements JobAdvertisementService {
 	}
 
 	@Override
-	public Result add(JobAdvertisement jobAdvertisement) {
+	public Result add(JobAdvertisementDto jobAdvertisementDto) {
+		JobAdvertisement jobAdvertisement = new JobAdvertisement();
+		
+		jobAdvertisement.setEmployer(this.employerDao.getOne(jobAdvertisementDto.getEmployerId()));
+		jobAdvertisement.setCity(this.cityDao.getOne(jobAdvertisementDto.getCityId()));
+		jobAdvertisement.setDescription(jobAdvertisementDto.getDescription());
+		jobAdvertisement.setExpirationDate(jobAdvertisementDto.getExpirationDate());
+		jobAdvertisement.setJobPosition(this.jobPositionDao.getOne(jobAdvertisementDto.getJobPositionId()));
+		jobAdvertisement.setMaxSalary(jobAdvertisementDto.getMaxSalary());
+		jobAdvertisement.setMinSalary(jobAdvertisementDto.getMinSalary());
+		jobAdvertisement.setQuota(jobAdvertisementDto.getQuota());
+		jobAdvertisement.setWorkingMethod(this.workingMethodDao.getOne(jobAdvertisementDto.getWorkingMethodId()));
+		jobAdvertisement.setWorkingTime(this.workingTimeDao.getOne(jobAdvertisementDto.getWorkingTimeId()));
+		jobAdvertisement.setCreatedDate(LocalDateTime.now());
+		jobAdvertisement.setActivationStatus(false);
+		
 		if (!isAllFieldsFilled(jobAdvertisement)) {
 			return new ErrorResult("Error: All fields must be filled!");
 		}
@@ -104,6 +137,15 @@ public class JobAdvertisementManager implements JobAdvertisementService {
 		return new SuccessResult("Updated: Activation Status is Updated as " + Boolean.toString(activationStatus));
 	}
 	
+	@Override
+	public DataResult<JobAdvertisement> getById(int id) {
+		if (!this.jobAdvertisementDao.existsById(id)) {
+			return new ErrorDataResult<JobAdvertisement>("Error: Job Advertisement could not be found!");
+		}
+		
+		return new SuccessDataResult<JobAdvertisement>(this.jobAdvertisementDao.getOne(id),"Job Advertisement Found.");
+	}
+	
 	
 	private boolean isCityExist(JobAdvertisement jobAdvertisement) {
 		if (this.cityDao.existsById(jobAdvertisement.getCity().getId())) {
@@ -124,8 +166,7 @@ public class JobAdvertisementManager implements JobAdvertisementService {
 	
 	
 	private boolean isAllFieldsFilled(JobAdvertisement jobAdvertisement) {
-		if (jobAdvertisement.getDescription().length() != 0 && jobAdvertisement.getExpirationDate() != null && 
-			jobAdvertisement.getCreatedDate() != null) {
+		if (jobAdvertisement.getDescription().length() != 0 && jobAdvertisement.getExpirationDate() != null) {
 			return true;
 		}
 		
@@ -148,6 +189,11 @@ public class JobAdvertisementManager implements JobAdvertisementService {
 		
 		return false;
 	}
-	
+
+	@Override
+	public Result delete(JobAdvertisement jobAdvertisement) {
+		this.jobAdvertisementDao.delete(jobAdvertisement);
+		return new SuccessResult("Successfully Deleted!");
+	}
 
 }

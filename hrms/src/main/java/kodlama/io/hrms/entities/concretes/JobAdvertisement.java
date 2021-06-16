@@ -2,6 +2,7 @@ package kodlama.io.hrms.entities.concretes;
 
 import java.util.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -50,15 +51,11 @@ public class JobAdvertisement {
 	@Column(name="is_active")
 	private boolean activationStatus;
 	
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_date", updatable = false)
-	private Date createdDate;
+	private LocalDateTime createdDate;
 
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="expiration_date")
-	private Date expirationDate;
+	private LocalDateTime expirationDate;
 	
 	@Column(name="description")
 	@Type(type = "text")
@@ -75,6 +72,14 @@ public class JobAdvertisement {
 	@ManyToOne
 	@JoinColumn(name="employer_id")
 	private Employer employer;
+	
+	@ManyToOne
+	@JoinColumn(name="working_time_id")
+	private WorkingTime workingTime;
+	
+	@ManyToOne
+	@JoinColumn(name="working_method_id")
+	private WorkingMethod workingMethod;
 	
 	
 }
